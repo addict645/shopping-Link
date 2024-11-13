@@ -1,4 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
+
+from shop.models import Logo
 from .forms import RegistrationForm, UserForm, UserProfileForm
 from .models import Account, UserProfile
 from orders.models import Order, OrderProduct
@@ -19,7 +21,9 @@ from cart.models import Cart, CartItem
 import requests
 
 
+
 def register(request):
+    
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
@@ -32,6 +36,7 @@ def register(request):
             user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
             user.phone_number = phone_number
             user.save()
+            
 
             # Create a user profile
             profile = UserProfile()
@@ -47,6 +52,7 @@ def register(request):
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user),
+                'logo': logo
             })
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
@@ -58,6 +64,8 @@ def register(request):
     context = {
         'form': form,
     }
+    
+    
     return render(request, 'accounts/register.html', context)
 
 
@@ -65,8 +73,12 @@ def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
+        logo = Logo.objects.first() 
+        
+        
 
         user = auth.authenticate(email=email, password=password)
+        
 
         if user is not None:
             try:
@@ -123,6 +135,7 @@ def login(request):
         else:
             messages.error(request, 'Invalid login credentials')
             return redirect('login')
+            
     return render(request, 'accounts/login.html')
 
 
@@ -154,22 +167,28 @@ def activate(request, uidb64, token):
 def dashboard(request):
     orders = Order.objects.order_by('-created_at').filter(user_id=request.user.id, is_ordered=True)
     orders_count = orders.count()
+    logo = Logo.objects.first() 
 
     userprofile = UserProfile.objects.get(user_id=request.user.id)
     context = {
         'orders_count': orders_count,
         'userprofile': userprofile,
+        'logo': logo
     }
     return render(request, 'accounts/dashboard.html', context)
 
 
 def forgotPassword(request):
+    
+    
     if request.method == 'POST':
         email = request.POST['email']
+
         if Account.objects.filter(email=email).exists():
             user = Account.objects.get(email__exact=email)
 
             # Reset password email
+            logo = Logo.objects.first() 
             current_site = get_current_site(request)
             mail_subject = 'Reset Your Password'
             message = render_to_string('accounts/reset_password_email.html', {
@@ -177,7 +196,9 @@ def forgotPassword(request):
                 'domain': current_site,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': default_token_generator.make_token(user),
+                'logo': logo
             })
+            
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
@@ -187,6 +208,7 @@ def forgotPassword(request):
         else:
             messages.error(request, 'Account does not exist!')
             return redirect('forgotPassword')
+    
     return render(request, 'accounts/forgotPassword.html')
 
 

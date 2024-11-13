@@ -3,6 +3,7 @@ from category.models import Category
 from django.urls import reverse
 from accounts.models import Account
 from django.db.models import Avg, Count
+from djmoney.models.fields import MoneyField
 
 # Create your models here.
 
@@ -10,7 +11,7 @@ class Product(models.Model):
     product_name    = models.CharField(max_length=200, unique=True)
     slug            = models.SlugField(max_length=200, unique=True)
     description     = models.TextField(max_length=500, blank=True)
-    price           = models.IntegerField()
+    price = MoneyField(max_digits=10, decimal_places=2, default_currency='Ksh')
     images          = models.ImageField(upload_to='photos/products')
     stock           = models.IntegerField()
     is_available    = models.BooleanField(default=True)
@@ -88,3 +89,20 @@ class ProductGallery(models.Model):
     class Meta:
         verbose_name = 'productgallery'
         verbose_name_plural = 'product gallery'
+
+
+class Banner(models.Model):
+    title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, blank=True, null=True)
+    image = models.ImageField(upload_to='banners/')
+    link = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title
+    
+class Logo(models.Model):
+    image = models.ImageField(upload_to='logos/', null=True, blank=True)
+    alt_text = models.CharField(max_length=100, null=True, blank=True, default="Site Logo")
+
+    def __str__(self):
+        return self.alt_text or "Site Logo"

@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Product, ReviewRating, ProductGallery
+from .models import Banner, Logo, Product, ReviewRating, ProductGallery
 from category.models import Category
 from cart.models import CartItem
 from django.db.models import Q
@@ -16,16 +16,21 @@ def store(request, category_slug=None):
     categories = None
     products = None
 
-    if category_slug != None:
+    # Fetch the latest banner
+    banner = Banner.objects.first()  # Adjust this based on your banner selection logic
+    logo = Logo.objects.first() 
+
+    # Handling category-based filtering
+    if category_slug is not None:
         categories = get_object_or_404(Category, slug=category_slug)
         products = Product.objects.filter(category=categories, is_available=True)
-        paginator = Paginator(products, 1)
+        paginator = Paginator(products, 1)  # Adjust number per page as needed
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
     else:
         products = Product.objects.all().filter(is_available=True).order_by('id')
-        paginator = Paginator(products, 3)
+        paginator = Paginator(products, 3)  # Adjust number per page as needed
         page = request.GET.get('page')
         paged_products = paginator.get_page(page)
         product_count = products.count()
@@ -33,7 +38,10 @@ def store(request, category_slug=None):
     context = {
         'products': paged_products,
         'product_count': product_count,
+        'banner': banner,  # Pass the banner object to the template
+        'logo': logo
     }
+
     return render(request, 'store/store.html', context)
 
 
@@ -103,3 +111,5 @@ def submit_review(request, product_id):
                 data.save()
                 messages.success(request, 'Thank you! Your review has been submitted.')
                 return redirect(url)
+
+

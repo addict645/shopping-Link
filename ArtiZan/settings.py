@@ -25,14 +25,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG' ,default=True,cast=bool)
 
-ALLOWED_HOSTS = []
+DEBUG = True
+
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # For local development
+# For production, use: ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    
+   
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'admin_honeypot',
+    'djmoney',
     
     
 ]
@@ -143,11 +148,15 @@ USE_TZ = True
 # MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR /'media'
 
+
+# settings.py
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS=[os.path.join(BASE_DIR,'static')]
 STATIC_ROOT=os.path.join(BASE_DIR,'assets')
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'media')
+
 
 
 # alert messages
@@ -158,13 +167,35 @@ MESSAGE_TAGS = {
 
 # SMTP CONFIGURATION
 
-EMAIL_BACKEND = config('EMAIL_BACKEND')
-EMAIL_HOST = config('EMAIL_HOST',default='localhost')
-EMAIL_PORT = config('EMAIL_PORT',cast=int)
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# Django Email settings for Gmail SMTP with environment variables
+from decouple import config
+
+from decouple import config
+
+EMAIL_BACKEND = config('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_HOST = config('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  # Gmail address
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  # App Password for Gmail
+
+
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+
+# Django Email settings for Gmail SMTP
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your_gmail_address@gmail.com'  # Replace with your Gmail address
+# EMAIL_HOST_PASSWORD = 'mjniaizintlqoqhy'  # Enter the App Password here without spaces
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+from decouple import config
+
+SECRET_KEY = config('SECRET_KEY')

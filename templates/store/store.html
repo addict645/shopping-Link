@@ -5,7 +5,7 @@
 {% if 'search' in request.path %}
      ArtiZan - Search result
     {% else %}
-	Artizan Store
+	Shopping Link
     {% endif %}
 {% endblock %}
 
@@ -18,7 +18,7 @@
 	{% if 'search' in request.path %}
 	<h2 class="title-page">Search result</h2>
 	{% else %}
-	<h2 class="title-page">Artizan Store</h2>
+	<h2 class="title-page">Shopping Link</h2>
 	{% endif %}
 
 </div> <!-- container //  -->
@@ -96,10 +96,10 @@
 			<div class="card-body">
 				
 				<div class="form-row">
-				<div class="form-group col-md-6">
+				<!-- <div class="form-group col-md-6">
 				  <label>Min</label>
 				  <!-- <input class="form-control" placeholder="$0" type="number"> -->
-				  	<select class="mr-2 form-control">
+				  <!--	<select class="mr-2 form-control">
 						<option value="0">$0</option>
 						<option value="50">$50</option>
 						<option value="100">$100</option>
@@ -108,7 +108,7 @@
 						<option value="500">$500</option>
 						<option value="1000">$1000</option>
 					</select>
-				</div>
+				</div> -
 				<div class="form-group text-right col-md-6">
 				  <label>Max</label>
 				  	<select class="mr-2 form-control">
@@ -120,7 +120,7 @@
 						<option value="1000">$1000</option>
 						<option value="2000">$2000+</option>
 					</select>
-				</div>
+				</div>-->
 				</div> <!-- form-row.// -->
 				<button class="btn btn-block btn-primary">Apply</button>
 			</div><!-- card-body.// -->
@@ -146,14 +146,14 @@
 		<figure class="card card-product-grid">
 			<div class="img-wrap"> 
 				
-				<a href="{{product.get_url}}"><img src="{{product.image.url}}"></a>
+				<a href="{{product.get_url}}"><img src="{{product.images.url}}"></a>
 				
 			</div> <!-- img-wrap.// -->
 			<figcaption class="info-wrap">
 				<div class="fix-height">
 					<a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
 					<div class="price-wrap mt-2">
-						<span class="price">${{product.price}}</span>
+						<span class="price">{{product.price}}</span>
 					</div> <!-- price-wrap.// -->
 				</div>
 				<a href="{{ product.get_url }}" class="btn btn-block btn-primary">View Details </a>
