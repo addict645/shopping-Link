@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ['*']
 
 
 # For production, use: ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
