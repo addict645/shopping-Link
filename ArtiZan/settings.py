@@ -28,7 +28,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['shopping-link-4.onrender.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'onlineshoplink.netlify.app']
+
 
 # For production, use: ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 
