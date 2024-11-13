@@ -28,7 +28,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']  # For local development
+ALLOWED_HOSTS = ['shopping-link-2.onrender.com', 'localhost', '127.0.0.1']
+
 # For production, use: ALLOWED_HOSTS = ['yourdomain.com', 'www.yourdomain.com']
 
 
